@@ -50,49 +50,47 @@ app.get('/registros', async (req, res) => { // Esse get pode usado tanto pra peg
   res.status(200).json(prod)
 })
 
+app.get('/todasLinhas', async (req, res) => {
+  const linhas = await prisma.registros.count();
+  return res.status(200).json(linhas);
+})
+
 app.put('/registros/:id', async (req, res) => {
   const { id } = req.params;
   const { is_open, scheduled_at } = req.body;
 
-  // Validação básica
-  if (!id || is_open === undefined) {
-    return res.status(400).json({ error: 'id e is_open são obrigatórios' });
-  }
   
-  if(scheduled_at !== undefined || (scheduled_at instanceof Date && !isNaN(scheduled_at))) {
-    return res.status(400).json({ error: 'scheduled_at deve ser uma data valida' });
-  }
+  const Data = {};  // Validação básica
+  if (is_open !== undefined) Data.is_open = is_open;
+  if (scheduled_at !== undefined) Data.scheduled_at = scheduled_at;
 
   try {
-    const registroExistente = await prisma.registros.findUnique({
-      where: { id },
-    });
+      const registroExistente = await prisma.registros.findUnique({
+          where: { id }, // Verifica se existe realmente uma linha no db com esse id, caso não houver, retorna o erro abaixo
+      });
 
-    if (!registroExistente) {
-      return res.status(404).json({ error: 'Registro não encontrado' });
-    }
+      if (!registroExistente) {
+          return res.status(404).json({ error: 'Registro não encontrado' });
+      }
 
-    const registroAtualizado = await prisma.registros.update({
-      where: { id },
-      data: { 
-        is_open: String(is_open),
-        scheduled_at: scheduled_at ?? undefined
-      },
-    });
+      const registroAtualizado = await prisma.registros.update({
+          where: { id },
+          data: Data,
+      });
 
-    res.status(200).json(registroAtualizado);
+      res.status(200).json(registroAtualizado);
   } catch (error) {
-    console.error('Erro ao atualizar registro:', error);
+      console.error('Erro ao atualizar registro:', error);
 
-    if (error.code === 'P2025') {
+      if (error.code === 'P2025') {
       // Erro de registro não encontrado
       res.status(404).json({ error: 'Registro não encontrado' });
-    } else {
+      } else {
       // Outros erros
       res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+      }
   }
-});
+  });
 
 chamandoCron(prisma); // Inicia a Cron que verifica se tem algum agendamento
 
