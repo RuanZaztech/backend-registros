@@ -1,6 +1,6 @@
-import WebSocket from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
 
-export default async function websocket (el) {
+export async function websocket (el) {
     return new Promise((resolve, reject) => {
         const ws = new WebSocket(`ws://${el?.ip_placa}`);
         const acao = el?.is_open === '1' ? '0' : '1';
@@ -23,4 +23,21 @@ export default async function websocket (el) {
             reject(error); // Se houver erro, rejeite a promessa
         });
     })
+}
+
+const wss = new WebSocketServer({ port: 3001 });
+export async function recebeWebSocket (nome = '', acao = '') {
+    console.log('caiu')
+
+    if(nome != '' && acao != '') {
+        const mensagem = JSON.stringify({ nome, acao });
+
+        // Enviar para todos os clientes conectados
+        wss.clients.forEach((client) => {
+          // Verifica se a conexão está aberta
+        if (client.readyState === client.OPEN) {
+            client.send(mensagem);
+        }
+        });
+    }
 }

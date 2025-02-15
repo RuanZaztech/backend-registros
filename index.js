@@ -3,6 +3,7 @@ import cors from "cors";
 import { PrismaClient } from '@prisma/client';
 
 import chamandoCron from "./service/Cron.js";
+import { recebeWebSocket } from "./service/WebSocket.js";
 
 const prisma = new PrismaClient();
 process.env.TZ = 'America/Sao_Paulo';
@@ -93,6 +94,7 @@ app.put('/registros/:id', async (req, res) => {
   });
 
 chamandoCron(prisma); // Inicia a Cron que verifica se tem algum agendamento
+recebeWebSocket();
 
 app.listen(3000, '0.0.0.0', () => {console.log('Entrou na api')});
 

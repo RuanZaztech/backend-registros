@@ -1,8 +1,8 @@
 import cron from 'node-cron'; 
-import websocket from './WebSocket.js';
+import { websocket, recebeWebSocket } from './WebSocket.js';
 
 
-export default async function chamandoCron (prisma) {
+export default async function chamandoCron (prisma, app) {
     cron.schedule('*/10 * * * * *', async () => {
         const agoraBrasil = new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') + '.000Z';
 
@@ -34,12 +34,17 @@ export default async function chamandoCron (prisma) {
                 
                 if(retornoWS === 'stop') {
                     const attregistro = await prisma.registros.update({
-                    where: { 'id': Data.id },
-                    data: { 
-                        is_open: String(acao),
-                        scheduled_at: null
-                    },
+                        where: { 'id': Data.id },
+                        data: { 
+                            is_open: String(acao),
+                            scheduled_at: null
+                        },
                     });
+
+                    console.warn(attregistro);
+                    const nome = attregistro.name;
+                    const acaoWh = attregistro.acao == '1' ? 'aberto' : 'fechado';
+                    recebeWebSocket(nome, acaoWh);
                 }
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);
