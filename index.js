@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
+import { Expo } from "expo-server-sdk";
 import { PrismaClient } from '@prisma/client';
 
 import chamandoCron from "./service/Cron.js";
-import { recebeWebSocket } from "./service/WebSocket.js";
 
 const prisma = new PrismaClient();
 process.env.TZ = 'America/Sao_Paulo';
+
+const expo = new Expo();
 
 const app = express();
 app.use(cors());
@@ -91,10 +93,36 @@ app.put('/registros/:id', async (req, res) => {
       res.status(500).json({ error: 'Erro interno do servidor' });
       }
   }
-  });
+});
+
+app.post('/send-notification', async (req, res) => {
+  const { token, title, body } = req.body;
+
+  if (!Expo.isExpoPushToken(token)) {
+      return res.status(400).send('Token inválido');
+  }
+
+  const message = {
+      to: token,
+      sound: null,
+      title: title,
+      body: body,
+      vibrate,
+      lightColor: '#FF231F7C',
+      data: { someData: 'goes here' }, // Dados adicionais (opcional)
+  };
+
+  try {
+      const ticket = await expo.sendPushNotificationsAsync([message]);
+      console.log('Notificação enviada com sucesso:', ticket);
+      res.status(200).send('Notificação enviada');
+  } catch (error) {
+      console.error('Erro ao enviar notificação:', error);
+      res.status(500).send('Erro ao enviar notificação');
+  }
+});
 
 chamandoCron(prisma); // Inicia a Cron que verifica se tem algum agendamento
-recebeWebSocket();
 
 app.listen(3000, '0.0.0.0', () => {console.log('Entrou na api')});
 

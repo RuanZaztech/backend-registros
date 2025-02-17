@@ -1,12 +1,12 @@
 import cron from 'node-cron'; 
-import { websocket, recebeWebSocket } from './WebSocket.js';
+import { websocket } from './WebSocket.js';
+import { sendTokenToServer } from './pushNotification.js';
 
 
 export default async function chamandoCron (prisma, app) {
     cron.schedule('*/10 * * * * *', async () => {
         const agoraBrasil = new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') + '.000Z';
 
-        console.log(agoraBrasil)
         const tarefas = await prisma.registros.findMany({
             where: { 
                 scheduled_at: { 
@@ -41,10 +41,9 @@ export default async function chamandoCron (prisma, app) {
                         },
                     });
 
-                    console.warn(attregistro);
                     const nome = attregistro.name;
                     const acaoWh = attregistro.acao == '1' ? 'aberto' : 'fechado';
-                    recebeWebSocket(nome, acaoWh);
+                    sendTokenToServer(nome, acao)
                 }
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);

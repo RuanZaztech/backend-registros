@@ -11,7 +11,6 @@ export async function websocket (el) {
 
         ws.onmessage = (Data) => {
             let data = Data.data;
-            console.log('resolve', data)
             if(data === 'stop') {
                 resolve({'retorno': data, 'acao': acao});
                 ws.close()
@@ -23,21 +22,4 @@ export async function websocket (el) {
             reject(error); // Se houver erro, rejeite a promessa
         });
     })
-}
-
-const wss = new WebSocketServer({ port: 3001 });
-export async function recebeWebSocket (nome = '', acao = '') {
-    console.log('caiu')
-
-    if(nome != '' && acao != '') {
-        const mensagem = JSON.stringify({ nome, acao });
-
-        // Enviar para todos os clientes conectados
-        wss.clients.forEach((client) => {
-          // Verifica se a conexão está aberta
-        if (client.readyState === client.OPEN) {
-            client.send(mensagem);
-        }
-        });
-    }
 }
