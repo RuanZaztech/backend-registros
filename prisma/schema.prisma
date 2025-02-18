@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = "mongodb+srv://ruanhoinaski:LbnJuiSMNRqvvWJK@produtos.xgobu.mongodb.net/db_produtos?retryWrites=true&w=majority&appName=produtos"
 }
 
 model Tokens {
