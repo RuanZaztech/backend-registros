@@ -95,6 +95,28 @@ app.put('/registros/:id', async (req, res) => {
   }
 });
 
+app.post('/tokens',  async (req, res) => {
+  const { token } = req.query;
+
+    const prod = await prisma.tokens.findMany({
+      where: {
+        token
+      }
+    })
+    
+    if(prod.length > 0) {
+      return false;
+    }
+
+    await prisma.tokens.create({
+      data: {
+        token: req.body.token,
+      }
+    })
+    
+    res.status(201).json({msg: 'Token cadastrado com sucesso!'});
+})
+
 app.post('/send-notification', async (req, res) => {
   const { token, title, body } = req.body;
 
@@ -107,8 +129,6 @@ app.post('/send-notification', async (req, res) => {
       sound: null,
       title: title,
       body: body,
-      vibrate,
-      lightColor: '#FF231F7C',
       data: { someData: 'goes here' }, // Dados adicionais (opcional)
   };
 
@@ -125,18 +145,6 @@ app.post('/send-notification', async (req, res) => {
 chamandoCron(prisma); // Inicia a Cron que verifica se tem algum agendamento
 
 app.listen(3000, '0.0.0.0', () => {console.log('Entrou na api')});
-
-// app.post('/registros',  async (req, res) => {
-
-//     await prisma.registros.create({
-//       data: {
-//         name: req.body.name,
-//         is_open: req.body.is_open,
-//       }
-//     })
-
-//     res.status(201).json({msg: 'Registro cadastrado com sucesso!'});
-// })
 
 
 

@@ -43,7 +43,7 @@ export default async function chamandoCron (prisma, app) {
 
                     const nome = attregistro.name;
                     const acaoWh = attregistro.acao == '1' ? 'aberto' : 'fechado';
-                    sendTokenToServer(nome, acao)
+                    sendTokenToServer(nome, acaoWh, prisma)
                 }
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);

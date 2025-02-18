@@ -13,11 +13,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Produto {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  nome          String? 
-  quantidade    String?
-  preco_em_real         String?
+model Tokens {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  token           String? 
+  data_cadastro   DateTime? @default(now())
 }
 
 model Registros {
