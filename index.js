@@ -113,7 +113,7 @@ app.post('/tokens',  async (req, res) => {
         token: req.body.token,
       }
     })
-
+    
     res.status(201).json({msg: 'Token cadastrado com sucesso!'});
 })
 
@@ -144,7 +144,7 @@ app.post('/send-notification', async (req, res) => {
 
 chamandoCron(prisma); // Inicia a Cron que verifica se tem algum agendamento
 
-app.listen(PORT, '0.0.0.0', () => {console.log('Entrou na api')});
+app.listen(3000, '0.0.0.0', () => {console.log('Entrou na api')});
 
 
 
