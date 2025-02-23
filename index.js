@@ -96,7 +96,7 @@ app.put('/registros/:id', async (req, res) => {
 });
 
 app.post('/tokens',  async (req, res) => {
-  const { token } = req.query;
+  const { token } = req.body;
 
     const prod = await prisma.tokens.findMany({
       where: {

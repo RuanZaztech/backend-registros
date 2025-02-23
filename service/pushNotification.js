@@ -10,8 +10,9 @@ export async function sendTokenToServer(nome, acao, prisma) {
             },
             body: JSON.stringify({
                 token: el.token,
+                sound: "sound",
                 title: 'Agendamento concluído',
-                body: `O ${nome} foi ${acao} com sucesso!`,
+                body: `O ${nome.replace('_', ' ').toUpperCase()} foi ${acao} com sucesso!`,
             }),
         });
     })
