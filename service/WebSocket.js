@@ -2,6 +2,8 @@ import WebSocket, { WebSocketServer } from 'ws';
 
 export async function websocket (el) {
     return new Promise((resolve, reject) => {
+        console.log(el)
+        console.log(el.ip_placa)
         const ws = new WebSocket(`ws://${el?.ip_placa}`);
         const acao = el?.is_open === '1' ? '0' : '1';
         
