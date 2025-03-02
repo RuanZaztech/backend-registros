@@ -4,17 +4,20 @@ import { sendTokenToServer } from './pushNotification.js';
 
 
 export default async function chamandoCron (prisma, app) {
+    console.log('entrou na Cron')
     cron.schedule('*/10 * * * * *', async () => {
         const agoraBrasil = new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') + '.000Z';
-
+        console.log('Chamando Cron')
         const tarefas = await prisma.registros.findMany({
-            where: { 
+            where: {
                 scheduled_at: { 
                 lt: agoraBrasil,
                 not: null,
                 },
             }
         })
+
+        console.log('aa', tarefas)
     
         if(tarefas.length <= 0) {
             console.log('Vazio')
