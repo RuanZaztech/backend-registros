@@ -142,10 +142,10 @@ app.post('/send-notification', async (req, res) => {
   }
 });
 
-chamandoCron(prisma); // Inicia a Cron que verifica se tem algum agendamento
 
 app.listen(3000, '0.0.0.0', () => {console.log('Entrou na api')});
 
+chamandoCron(prisma); // Inicia a Cron que verifica se tem algum agendamento
 
 
 // app.delete('/registros/:id',  async (req, res) => {
