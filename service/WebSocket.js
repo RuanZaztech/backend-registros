@@ -1,10 +1,10 @@
-import { createRegistroEsp } from './Api';
+import { createRegistroEsp } from './Api.js';
 
 export async function websocket (el) {
     return new Promise(async (resolve, reject) => {
         const comando = el?.is_open === '1' ? 0 : 1;
 
-        data = {
+        const data = {
             comando
         }
 
