@@ -9,7 +9,7 @@ export async function websocket (el) {
         }
 
         try {
-            const result = await createRegistroEsp('/enviar-comando', data);
+            const result = await createRegistroEsp(`/enviar-comando/${el.ip_placa}`, data);
             if(result.resposta === 'stop') {
                 resolve({'retorno': result.resposta, 'acao': comando});
             }
