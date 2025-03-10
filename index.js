@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api', ServerEsp);
+app.use('/comand', ServerEsp);
 
 const expo = new Expo();
 
