@@ -4,15 +4,18 @@ import { Expo } from "expo-server-sdk";
 import { PrismaClient } from '@prisma/client';
 
 import chamandoCron from "./service/Cron.js";
+import ServerEsp from "./routes/ServerEsp.js";
 
 const prisma = new PrismaClient();
 process.env.TZ = 'America/Sao_Paulo';
 
-const expo = new Expo();
-
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use('/api', ServerEsp);
+
+const expo = new Expo();
 
 app.get('/registros', async (req, res) => { // Esse get pode usado tanto pra pegar um registro em especifico quanto pra pegar todos os resultados caso n venha nada no "query"
 
