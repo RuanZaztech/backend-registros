@@ -13,7 +13,6 @@ portEsp.forEach(porta => {
     wssInstances[porta] = iniciaConexaoComPlaca(porta);
 });
 
-console.log(wssInstances)
 
 function iniciaConexaoComPlaca(porta) {
     const wss = new WebSocketServer({ port: porta });

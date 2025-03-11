@@ -129,10 +129,10 @@ app.post('/send-notification', async (req, res) => {
 
   const message = {
       to: token,
-      sound: null,
+      sound: 'sound',
       title: title,
       body: body,
-      data: { someData: 'goes here' }, // Dados adicionais (opcional)
+      data: { someData: 'goes here' },
   };
 
   try {

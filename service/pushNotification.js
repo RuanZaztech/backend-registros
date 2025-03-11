@@ -3,7 +3,7 @@ export async function sendTokenToServer(nome, acao, prisma) {
     const allTokens = await prisma.tokens.findMany({});
     
     allTokens.forEach(el => {
-        fetch('http://0.0.0.0:3000/send-notification', {
+        fetch('https://srv737240.hstgr.cloud/send-notification', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
