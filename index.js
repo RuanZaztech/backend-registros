@@ -129,7 +129,7 @@ app.post('/send-notification', async (req, res) => {
 
   const message = {
       to: token,
-      sound: 'sound',
+      sound: 'sound.mp3',
       title: title,
       body: body,
       data: { someData: 'goes here' },
